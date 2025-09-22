@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ask Function Demo - TheAVCfiles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; color: #222; margin: 0; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 40px; }
+    h1 { font-size: 2em; margin-bottom: 0.5em; color: #333; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    textarea, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    textarea { height: 120px; resize: vertical; }
+    button { background: #007cba; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    button:hover { background: #005a87; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .result { margin-top: 20px; padding: 15px; border-radius: 4px; border-left: 4px solid #007cba; background: #f0f8ff; }
+    .error { border-left-color: #dc3545; background: #fff5f5; color: #721c24; }
+    .loading { opacity: 0.7; }
+    pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    .rate-limit-info { font-size: 0.9em; color: #666; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ask Function Demo</h1>
+    <p>This demo shows the distributed rate-limiting and caching functionality of the <code>ask.js</code> Netlify function.</p>
+    
+    <form id="askForm">
+      <div class="form-group">
+        <label for="glossaryContent">Glossary Content:</label>
+        <textarea 
+          id="glossaryContent" 
+          name="glossaryContent" 
+          placeholder="Enter your glossary content here..."
+          required>
+The Internet is a global network of interconnected computers that communicate using standardized protocols. 
+HTML (HyperText Markup Language) is the standard markup language for creating web pages.
+CSS (Cascading Style Sheets) is used for describing the presentation of web pages.
+JavaScript is a programming language that enables interactive web pages.
+        </textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="additionalContext">Additional Context (optional):</label>
+        <input 
+          type="text" 
+          id="additionalContext" 
+          name="additionalContext" 
+          placeholder="Optional context for processing..."
+        />
+      </div>
+      
+      <button type="submit" id="submitBtn">Process Content</button>
+    </form>
+    
+    <div id="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('askForm');
+    const resultDiv = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const payload = {
+        glossaryContent: formData.get('glossaryContent'),
+        additionalContext: formData.get('additionalContext') || ''
+      };
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+      resultDiv.style.display = 'block';
+      resultDiv.className = 'result loading';
+      resultDiv.innerHTML = '<p>Processing your request...</p>';
+
+      try {
+        const startTime = Date.now();
+        const response = await fetch('/api/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const requestTime = Date.now() - startTime;
+        const data = await response.json();
+
+        if (response.ok) {
+          resultDiv.className = 'result';
+          resultDiv.innerHTML = `
+            <h3>✅ Processing Complete</h3>
+            <p><strong>Summary:</strong> ${data.summary}</p>
+            <p><strong>Word Count:</strong> ${data.wordCount}</p>
+            <p><strong>Processing Time:</strong> ${data.processingTimeMs}ms (server) / ${requestTime}ms (total)</p>
+            <p><strong>Timestamp:</strong> ${data.timestamp}</p>
+            ${data.context ? `<p><strong>Context:</strong> ${data.context}</p>` : ''}
+            ${data.fromCache ? '<p><strong>📦 Served from cache</strong></p>' : '<p><strong>🔄 Freshly processed</strong></p>'}
+            
+            <div class="rate-limit-info">
+              <strong>Rate Limit Info:</strong> ${data.rateLimitInfo.remainingRequests} requests remaining in ${data.rateLimitInfo.windowMs}ms window
+            </div>
+            
+            <details style="margin-top: 15px;">
+              <summary>Full Response</summary>
+              <pre>${JSON.stringify(data, null, 2)}</pre>
+            </details>
+          `;
+        } else {
+          throw new Error(`${response.status}: ${data.error || 'Unknown error'}`);
+        }
+      } catch (error) {
+        resultDiv.className = 'result error';
+        if (error.message.includes('429')) {
+          resultDiv.innerHTML = `
+            <h3>⚠️ Rate Limit Exceeded</h3>
+            <p>You've exceeded the rate limit. Please wait and try again.</p>
+            <p><strong>Error:</strong> ${error.message}</p>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <h3>❌ Error</h3>
+            <p><strong>Message:</strong> ${error.message}</p>
+            <p>Please check your input and try again.</p>
+          `;
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Process Content';
+      }
+    });
+
+    // Show current date (matching the main site functionality)
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const dateStr = today.getFullYear() + '-' + 
+                     String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                     String(today.getDate()).padStart(2, '0');
+      
+      console.log(`Demo loaded on ${dateStr}`);
+    });
+  </script>
+</body>
+</html>
