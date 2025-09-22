@@ -1,0 +1,86 @@
+---
+name: Deploy GitHub Pages with Dynamic Date
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # Run daily at 00:01 UTC to update the date
+  schedule:
+    - cron: '1 0 * * *'
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run
+# in-progress and latest queued. However, do NOT cancel in-progress runs as we
+# want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get current date
+        id: date
+        run: echo "TODAY=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Process files with dynamic date replacement
+        run: |
+          # Create a temporary build directory
+          mkdir -p _build
+
+          # Copy all files from public to _build
+          cp -r public/* _build/
+
+          # Replace YYYY-MM-DD with current date in all HTML files
+          find _build -name "*.html" -type f \
+            -exec sed -i "s/YYYY-MM-DD/${{ steps.date.outputs.TODAY }}/g" {} \;
+
+          # Replace YYYY-MM-DD with current date in all JS files
+          find _build -name "*.js" -type f \
+            -exec sed -i "s/YYYY-MM-DD/${{ steps.date.outputs.TODAY }}/g" {} \;
+
+          # Replace YYYY-MM-DD with current date in all JSON files
+          find _build -name "*.json" -type f \
+            -exec sed -i "s/YYYY-MM-DD/${{ steps.date.outputs.TODAY }}/g" {} \;
+
+          # Log the date replacement
+          echo "Replaced YYYY-MM-DD with ${{ steps.date.outputs.TODAY }}"
+
+          # Show which files were processed
+          echo "Processed files:"
+          find _build -type f | head -10
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_build'
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
