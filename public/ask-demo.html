@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ask Function Demo - TheAVCfiles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f9f9f9; 
+      color: #222; 
+      margin: 0; 
+      padding: 20px; 
+    }
+    .container { 
+      max-width: 800px; 
+      margin: 0 auto; 
+      background: #fff; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
+      padding: 40px; 
+    }
+    h1 { 
+      font-size: 2.5em; 
+      margin-bottom: 0.5em; 
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    button {
+      background: #007cba;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #005a87;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .response {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .response.success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    .response.error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    .status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ask Function Demo</h1>
+    <p>This demo shows how to interact with the TheAVCfiles ask serverless function.</p>
+    
+    <form id="askForm">
+      <div class="form-group">
+        <label for="question">Question (required):</label>
+        <input type="text" id="question" name="question" 
+               placeholder="What would you like to know?" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="glossary">Glossary (JSON array):</label>
+        <textarea id="glossary" name="glossary" 
+                  placeholder='["term1", "term2", "term3"]'>["artificial intelligence", "machine learning", "natural language processing"]</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="extraContext">Extra Context:</label>
+        <textarea id="extraContext" name="extraContext" 
+                  placeholder="Additional context for processing...">Technical documentation about AI and machine learning concepts</textarea>
+      </div>
+      
+      <button type="submit" id="submitBtn">Ask Question</button>
+      <button type="button" id="clearBtn">Clear</button>
+    </form>
+    
+    <div id="response" class="response" style="display: none;"></div>
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('askForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const responseDiv = document.getElementById('response');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const question = document.getElementById('question').value.trim();
+      const glossaryText = document.getElementById('glossary').value.trim();
+      const extraContext = document.getElementById('extraContext').value.trim();
+      
+      if (!question) {
+        alert('Please enter a question');
+        return;
+      }
+      
+      let glossary;
+      try {
+        glossary = glossaryText ? JSON.parse(glossaryText) : [];
+      } catch (error) {
+        alert('Invalid JSON in glossary field');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+      statusDiv.textContent = 'Sending request...';
+      responseDiv.style.display = 'none';
+      
+      try {
+        const startTime = Date.now();
+        
+        const response = await fetch('/.netlify/functions/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            question,
+            glossary,
+            extraContext
+          })
+        });
+        
+        const responseTime = Date.now() - startTime;
+        const data = await response.json();
+        
+        responseDiv.style.display = 'block';
+        
+        if (response.ok) {
+          responseDiv.className = 'response success';
+          responseDiv.textContent = JSON.stringify(data, null, 2);
+          statusDiv.textContent = `Success! Response time: ${responseTime}ms | Cache: ${data.metadata?.cacheHit ? 'HIT' : 'MISS'}`;
+        } else {
+          responseDiv.className = 'response error';
+          responseDiv.textContent = JSON.stringify(data, null, 2);
+          statusDiv.textContent = `Error ${response.status}: ${response.statusText} | Response time: ${responseTime}ms`;
+        }
+        
+      } catch (error) {
+        responseDiv.style.display = 'block';
+        responseDiv.className = 'response error';
+        responseDiv.textContent = `Network error: ${error.message}`;
+        statusDiv.textContent = 'Failed to connect to the serverless function';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Ask Question';
+      }
+    });
+    
+    clearBtn.addEventListener('click', () => {
+      form.reset();
+      responseDiv.style.display = 'none';
+      statusDiv.textContent = '';
+      // Reset to default values
+      document.getElementById('glossary').value = '["artificial intelligence", "machine learning", "natural language processing"]';
+      document.getElementById('extraContext').value = 'Technical documentation about AI and machine learning concepts';
+    });
+  </script>
+</body>
+</html>

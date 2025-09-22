@@ -1,0 +1,21 @@
+[build]
+  publish = "_build"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Environment variables for Redis connection
+[context.production.environment]
+  REDIS_URL = ""
+  REDIS_TTL = "3600"
+  RATE_LIMIT_WINDOW_MS = "60000"
+  RATE_LIMIT_MAX_REQUESTS = "100"
+  CACHE_TTL_SECONDS = "3600"
+
+[context.deploy-preview.environment]
+  REDIS_URL = ""
+  REDIS_TTL = "1800"
+  RATE_LIMIT_WINDOW_MS = "60000"
+  RATE_LIMIT_MAX_REQUESTS = "50"
+  CACHE_TTL_SECONDS = "1800"

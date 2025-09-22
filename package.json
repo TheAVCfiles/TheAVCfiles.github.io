@@ -1,0 +1,35 @@
+{
+  "name": "theavcfiles-serverless",
+  "version": "1.0.0",
+  "description": "Serverless functions for TheAVCfiles",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "npm run build:pages",
+    "build:pages": "mkdir -p _build && cp -r public/* _build/",
+    "test": "jest",
+    "lint": "eslint netlify/functions/**/*.js"
+  },
+  "dependencies": {
+    "rate-limiter-flexible": "^5.0.0",
+    "redis": "^4.6.0",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "@netlify/functions": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "netlify",
+    "serverless",
+    "redis",
+    "rate-limiting",
+    "caching"
+  ],
+  "author": "TheAVCfiles",
+  "license": "MIT"
+}
