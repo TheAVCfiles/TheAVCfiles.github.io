@@ -8,6 +8,7 @@ Automated GitHub Pages deployment with dynamic date handling for JSONL file URLs
 - 📅 **Dynamic Date Replacement**: Automatically replaces `YYYY-MM-DD` placeholders with current date
 - 🔄 **Daily Updates**: Scheduled workflow runs daily to keep date links current
 - 📱 **Mobile-Friendly**: Optimized for file uploads from external devices like iPhones
+- ⚡ **Serverless Functions**: AI-powered ask function with distributed rate limiting and caching
 
 ## Quick Start
 
@@ -43,6 +44,10 @@ const dataUrl = 'https://api.example.com/data/YYYY-MM-DD.json';
 - **Processing**: GitHub Actions workflow replaces date placeholders during build
 - **Deployment**: Processed files deployed to GitHub Pages automatically
 - **Scheduling**: Daily runs ensure date links stay current
+- **Serverless Functions**: Netlify functions in `netlify/functions/` directory
+  - Redis-based distributed rate limiting
+  - Intelligent caching for improved performance
+  - Comprehensive logging and monitoring
 
 ## Contributing
 
