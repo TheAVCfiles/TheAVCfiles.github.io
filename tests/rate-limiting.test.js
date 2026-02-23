@@ -1,14 +1,18 @@
 const { handler } = require('../netlify/functions/ask');
 
-// Mock rate limiting behavior
-jest.mock('rate-limiter-flexible', () => ({
-  RateLimiterRedis: jest.fn(() => ({
-    consume: jest.fn()
-      .mockResolvedValueOnce({ remainingPoints: 99, msBeforeNext: 0 })
-      .mockResolvedValueOnce({ remainingPoints: 98, msBeforeNext: 0 })
-      .mockRejectedValueOnce({ remainingPoints: 0, msBeforeNext: 30000 })
-  }))
-}));
+// Ensure mocks are cleared and set up before each test
+beforeEach(() => {
+  jest.clearAllMocks();
+  const rateLimiterFlexible = require('rate-limiter-flexible');
+  if (rateLimiterFlexible.RateLimiterRedis && rateLimiterFlexible.RateLimiterRedis.mock) {
+    rateLimiterFlexible.RateLimiterRedis.mockImplementation(() => ({
+      consume: jest.fn()
+        .mockResolvedValueOnce({ remainingPoints: 99, msBeforeNext: 0 })
+        .mockResolvedValueOnce({ remainingPoints: 98, msBeforeNext: 0 })
+        .mockRejectedValueOnce({ remainingPoints: 0, msBeforeNext: 30000 })
+    }));
+  }
+});
 
 describe('ask.js Rate Limiting', () => {
   const mockContext = { awsRequestId: 'test-request-id' };
