@@ -71,8 +71,8 @@ async function initializeRedis() {
         storeClient: redisClient,
         keyPrefix: 'ask_function_rl',
         points: RATE_MAX_REQUESTS,
-        duration: Math.floor(RATE_WINDOW_MS / 1000), // Convert to seconds
-        blockDuration: Math.floor(RATE_WINDOW_MS / 1000), // Block for the same duration
+        duration: Math.ceil(RATE_WINDOW_MS / 1000), // Convert to seconds, ensure minimum 1
+        blockDuration: Math.ceil(RATE_WINDOW_MS / 1000), // Block for the same duration, ensure minimum 1
       });
       console.log(`Rate limiter initialized: ${RATE_MAX_REQUESTS} requests per ${RATE_WINDOW_MS}ms`);
     } catch (error) {
