@@ -292,7 +292,9 @@ exports.handler = async (event, context) => {
     const responseData = {
       ...processedData,
       requestId: context.awsRequestId,
-      processingTimeMs: Date.now() - startTime,
+      processingTimeMs: (processedData.fromCache && typeof processedData.processingTimeMs === 'number')
+        ? processedData.processingTimeMs
+        : Date.now() - startTime,
       rateLimitInfo: {
         remainingRequests: rateLimitResult.remainingPoints,
         windowMs: RATE_WINDOW_MS
