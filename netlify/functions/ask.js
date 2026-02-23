@@ -22,7 +22,10 @@ const { createClient } = require('redis');
 const crypto = require('crypto');
 
 // Configuration from environment variables
-const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+if (!process.env.REDIS_URL) {
+  throw new Error('REDIS_URL environment variable must be set');
+}
+const REDIS_URL = process.env.REDIS_URL;
 const RATE_WINDOW_MS = parseInt(process.env.RATE_WINDOW_MS || '60000', 10);
 const RATE_MAX_REQUESTS = parseInt(process.env.RATE_MAX_REQUESTS || '100', 10);
 const CACHE_TTL = parseInt(process.env.CACHE_TTL || '3600', 10);
