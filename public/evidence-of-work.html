@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Verified public evidence of systems, software, product architecture, and technical storytelling by A. C. Van Cura.">
+  <title>Evidence of Work | A. C. Van Cura</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #4b5563;
+      --paper: #f7f7f4;
+      --card: #ffffff;
+      --line: #d7d9dd;
+      --accent: #6d28d9;
+      --accent-soft: #ede9fe;
+      --proof: #166534;
+      --proof-soft: #dcfce7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); }
+    a:hover { text-decoration-thickness: 2px; }
+
+    .shell {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 56px 0 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      max-width: 800px;
+      margin: 0;
+      font-size: clamp(2.3rem, 6vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .lede {
+      max-width: 790px;
+      margin: 22px 0 0;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--muted);
+    }
+
+    .doctrine {
+      margin: 28px 0 0;
+      padding: 18px 20px;
+      border-left: 5px solid var(--accent);
+      background: var(--accent-soft);
+      font-weight: 750;
+      font-size: 1.04rem;
+    }
+
+    main { padding: 38px 0 72px; }
+
+    section { margin-top: 50px; }
+    section:first-child { margin-top: 0; }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
+      letter-spacing: -0.025em;
+    }
+
+    .standards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .standard,
+    .project {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .standard { padding: 18px; }
+    .standard strong { display: block; margin-bottom: 6px; }
+    .standard p { margin: 0; color: var(--muted); }
+
+    .projects {
+      display: grid;
+      gap: 20px;
+    }
+
+    .project { padding: 24px; }
+
+    .project-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .project h3 {
+      margin: 0;
+      font-size: 1.42rem;
+      letter-spacing: -0.02em;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--proof-soft);
+      color: var(--proof);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .summary {
+      max-width: 850px;
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .claim {
+      margin: 18px 0 0;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #f3f4f6;
+    }
+
+    .claim strong { display: block; margin-bottom: 3px; }
+
+    .evidence {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .evidence a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .evidence a:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .boundary {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .boundary h2 { color: #fff; }
+    .boundary p, .boundary li { color: #d1d5db; }
+    .boundary ul { margin-bottom: 0; }
+
+    footer {
+      padding: 24px 0 44px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      header { padding-top: 38px; }
+      .project { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <p class="eyebrow">Public Evidence Portfolio</p>
+      <h1>Evidence of Work</h1>
+      <p class="lede">
+        A verifiable record of systems architecture, software prototypes, product logic, technical communication, and founder-built infrastructure by A. C. Van Cura.
+      </p>
+      <p class="doctrine">The relationship explains access. The record establishes contribution.</p>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section aria-labelledby="standard-title">
+      <h2 id="standard-title">Evidence standard</h2>
+      <div class="standards">
+        <article class="standard">
+          <strong>Code</strong>
+          <p>Public source, repository structure, schemas, tests, and implementation artifacts.</p>
+        </article>
+        <article class="standard">
+          <strong>Commit history</strong>
+          <p>Dated commits and merged pull requests that preserve development sequence.</p>
+        </article>
+        <article class="standard">
+          <strong>Live proof</strong>
+          <p>Public demos or deployed interfaces that allow direct inspection.</p>
+        </article>
+        <article class="standard">
+          <strong>Boundaries</strong>
+          <p>Explicit limits on what each artifact proves and what remains private.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="selected-title">
+      <h2 id="selected-title">Selected verified work</h2>
+      <div class="projects">
+        <article class="project">
+          <div class="project-head">
+            <h3>StagePort x CueR: Operational Memory for Live Event Rooms</h3>
+            <span class="status">Public and deployed</span>
+          </div>
+          <p class="summary">
+            A multi-agent live-event access and introduction system. CueR reads synthetic room context, pass tier, participant intent, zone pressure, and operational state, then proposes actions for a human director to approve. Approved actions become receipt and keychain artifacts.
+          </p>
+          <div class="claim">
+            <strong>What this proves</strong>
+            Product thesis, systems architecture, human-in-the-loop governance, public-safe data boundaries, agent interfaces, receipt logic, deployment planning, and technical documentation.
+          </div>
+          <div class="evidence">
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon">Repository</a>
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon/blob/main/README.md">Technical README</a>
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon/blob/main/FOUNDER_ORIGIN.md">Founder origin</a>
+            <a href="https://stageportxcuer.replit.app/">Live demo</a>
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon/commits/main">Commit history</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>StagePort CueRoom: Education Agent with Human Approval</h3>
+            <span class="status">Merged PR and deployed</span>
+          </div>
+          <p class="summary">
+            A bounded education-track agent that turns movement vocabulary, counts, music cues, learning objectives, and constraints into a structured choreography-room proposal. The implementation uses strict tools, visible tool traces, a separate human decision gate, and SHA-256 proof receipts.
+          </p>
+          <div class="claim">
+            <strong>What this proves</strong>
+            Structured AI tool use, strict schema design, teacher-facing UX, test discipline, explicit approval boundaries, cryptographic receipt generation, and public submission packaging.
+          </div>
+          <div class="evidence">
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon/pull/1">Merged pull request</a>
+            <a href="https://stageport-cueroom-build-week.vercel.app/">Live demo</a>
+            <a href="https://github.com/TheAVCfiles/stageport-cuer-hackathon/commit/cba9f74a860c83042b0a7a296db8a7fe8908f709">Merge commit</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>StagePort PayGait: Consent, Conversion, and Royalty Infrastructure</h3>
+            <span class="status">Merged implementation</span>
+          </div>
+          <p class="summary">
+            A starter implementation for SentientCents-to-Stagecoin conversion flows using a gas-sponsored relayer, EIP-712 consent signatures, role-controlled smart contracts, royalty logic, a React signing client, deployment artifacts, and operational documentation.
+          </p>
+          <div class="claim">
+            <strong>What this proves</strong>
+            Payment and conversion architecture, smart-contract role controls, signature verification, nonce and expiry handling, relayer design, product UI, and operational hardening awareness.
+          </div>
+          <div class="evidence">
+            <a href="https://github.com/TheAVCfiles/codex/pull/223">Merged pull request</a>
+            <a href="https://github.com/TheAVCfiles/codex/commit/136aa004d2f3a399f770ab6388b859a89bbffaee">Merge commit</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Holiday Activity: Choreographic Rights Management</h3>
+            <span class="status">Public repository</span>
+          </div>
+          <p class="summary">
+            A decentralized prototype for choreographic rights management using Solidity contracts, role-based access control, configurable royalties, Stagecoin and SentientCents, and a React interface for movement-claim and PayGait workflows.
+          </p>
+          <div class="claim">
+            <strong>What this proves</strong>
+            Translation of choreographic rights concepts into token, royalty, permissions, frontend, testing, and deployment primitives.
+          </div>
+          <div class="evidence">
+            <a href="https://github.com/TheAVCfiles/Holiday-Activity">Repository</a>
+            <a href="https://github.com/TheAVCfiles/Holiday-Activity/blob/main/README.md">README</a>
+            <a href="https://github.com/TheAVCfiles/Holiday-Activity/commit/e051171791152c5d1e40c3b9d8cbc428173b9bd7">Implementation commit</a>
+            <a href="https://github.com/TheAVCfiles/Holiday-Activity/commit/4f5b35caae29a68697c234b1cacea5cd1995060f">Completion commit</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Decrypt The Girl: Interactive Poetic Codebook</h3>
+            <span class="status">Public and deployed</span>
+          </div>
+          <p class="summary">
+            A web-based interactive narrative that combines poetry, code, myth, responsive navigation, accessible interaction patterns, market-oriented interfaces, telemetry, and automated GitHub deployment.
+          </p>
+          <div class="claim">
+            <strong>What this proves</strong>
+            Original product authorship, narrative systems design, front-end implementation, interaction design, technical documentation, and long-form continuity between artistic method and software architecture.
+          </div>
+          <div class="evidence">
+            <a href="https://github.com/TheAVCfiles/Decrypt-The-Girl">Repository</a>
+            <a href="https://github.com/TheAVCfiles/Decrypt-The-Girl/blob/main/README.md">README</a>
+            <a href="https://theavcfiles.github.io/Decrypt-The-Girl/">Live experience</a>
+            <a href="https://github.com/TheAVCfiles/Decrypt-The-Girl/actions">Automation history</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="boundary" aria-labelledby="boundary-title">
+      <h2 id="boundary-title">Claim boundary</h2>
+      <p>This page is intentionally narrower than a full biography or private evidence archive.</p>
+      <ul>
+        <li>It does not convert informal collaboration into a false employment claim.</li>
+        <li>It does not claim causation for third-party acquisitions, funding, or institutional outcomes.</li>
+        <li>It does not publish confidential correspondence, private client work, credentials, signing keys, or proprietary production logic.</li>
+        <li>It does show public code, dated development history, deployed demonstrations, merged pull requests, and documented system boundaries.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <span>A. C. Van Cura | TheAVCfiles</span>
+      <span><a href="https://github.com/TheAVCfiles">GitHub profile</a> · <a href="/">Home</a></span>
+    </div>
+  </footer>
+</body>
+</html>
